@@ -1,0 +1,20 @@
+k8s scheduler 调度器代码走读
+
+内容：
+    两个部分：数据 + 流程；
+    数据包括：cache、queue；
+    流程：调度器初始化流程、完整的调度流程；
+
+
+cache：
+    存储用于支持调度的资源信息，包括：
+    Node信息：资源、affinity、hostPort等信息
+    Pod信息：已调度pod
+    PVC、PV信息
+
+queue：
+    存储等待调度的pod；
+    包括3个queue：
+        activeQ：等待调度的pod，heap结构，有优先级
+        backOffQ：调度失败的pod，expire时间，等待再次调度
+        unscheduleableQ：根据当前条件判断为不可调度的pod；资源、pod等发生变化时，会移动到activeQ
